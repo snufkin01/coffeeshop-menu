@@ -1,0 +1,785 @@
+<title>Coffeeshop Company</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,600&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F1E4C4;
+    --surface:#FBF4E1;
+    --surface-2:#E8D8A9;
+    --ink:#26200F;
+    --ink-soft:#6C5E3B;
+    --ink-faint:#9C8B5D;
+    --line:#DECA92;
+    --green:#173B2C;
+    --green-ink:#0E2A1F;
+    --green-soft:#DDE7DC;
+    --gold:#93661C;
+    --gold-ink:#7A5416;
+    --gold-soft:#F1D999;
+    --gold-block:#E8C57C;
+    --maroon:#742036;
+    --maroon-ink:#5E1A2B;
+    --maroon-soft:#EFD2D8;
+    --shadow: 0 14px 34px -18px rgb(23 59 44 / .45);
+    --sheet-shadow: 0 -18px 40px -14px rgb(23 59 44 / .35);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#0F2A1F;
+      --surface:#173226;
+      --surface-2:#1F3D2C;
+      --ink:#F3ECDA;
+      --ink-soft:#C6D3C7;
+      --ink-faint:#8CA490;
+      --line:#2C4A38;
+      --green:#8FD6AC;
+      --green-ink:#B9E9CC;
+      --green-soft:#1F3729;
+      --gold:#E8BD62;
+      --gold-ink:#F1CE87;
+      --gold-soft:#3B2F15;
+      --gold-block:#4E3C17;
+      --maroon:#EC93A4;
+      --maroon-ink:#F3AEBB;
+      --maroon-soft:#3C1E26;
+      --shadow: 0 14px 34px -18px rgb(0 0 0 / .6);
+      --sheet-shadow: 0 -18px 40px -14px rgb(0 0 0 / .55);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0F2A1F;
+    --surface:#173226;
+    --surface-2:#1F3D2C;
+    --ink:#F3ECDA;
+    --ink-soft:#C6D3C7;
+    --ink-faint:#8CA490;
+    --line:#2C4A38;
+    --green:#8FD6AC;
+    --green-ink:#B9E9CC;
+    --green-soft:#1F3729;
+    --gold:#E8BD62;
+    --gold-ink:#F1CE87;
+    --gold-soft:#3B2F15;
+    --gold-block:#4E3C17;
+    --maroon:#EC93A4;
+    --maroon-ink:#F3AEBB;
+    --maroon-soft:#3C1E26;
+    --shadow: 0 14px 34px -18px rgb(0 0 0 / .6);
+    --sheet-shadow: 0 -18px 40px -14px rgb(0 0 0 / .55);
+    color-scheme: dark;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{ height:100%; }
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:"Manrope",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    overflow:hidden;
+    -webkit-tap-highlight-color:transparent;
+  }
+  h1,h2,h3,.disp{ font-family:"Fraunces","Iowan Old Style",Georgia,serif; }
+  ::selection{ background:var(--gold-soft); }
+  button{ font-family:inherit; }
+  a{ color:inherit; }
+
+  .app{ display:flex; flex-direction:column; height:100%; min-height:0; }
+
+  /* ---------- Top bar ---------- */
+  .topbar{
+    flex:none;
+    background:var(--bg);
+    border-bottom:1px solid var(--line);
+    box-shadow:0 10px 18px -18px rgb(0 0 0 / .3);
+    padding-top:env(safe-area-inset-top,0px);
+    position:relative;
+    z-index:30;
+  }
+  .brandrow{ display:flex; align-items:center; gap:8px; padding:12px 20px 10px; }
+  .brandrow .bean{
+    width:24px;height:24px;border-radius:50%;
+    background:var(--green);
+    display:flex;align-items:center;justify-content:center;
+    flex:none;
+  }
+  :root[data-theme="dark"] .brandrow .bean{ background:var(--green-soft); }
+  @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .brandrow .bean{ background:var(--green-soft); } }
+  .brandrow .bean svg{ width:13px;height:13px; }
+  .brandrow .bean svg path{ stroke:#F3ECDA; }
+  :root[data-theme="dark"] .brandrow .bean svg path{ stroke:#0F2A1F; }
+  @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .brandrow .bean svg path{ stroke:#0F2A1F; } }
+  .brandrow .name{ font-size:11px; letter-spacing:.15em; text-transform:uppercase; font-weight:800; color:var(--ink-soft); }
+  .brandrow .sub{ margin-left:auto; font-size:11.5px; color:var(--ink-faint); font-style:italic; font-family:"Fraunces",serif; }
+
+  .tabs{
+    margin:0 20px 10px;
+    position:relative;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    background:var(--surface-2);
+    border-radius:999px;
+    padding:4px;
+  }
+  .tabs .pill{
+    position:absolute;
+    top:4px; bottom:4px; left:4px;
+    width:calc(50% - 4px);
+    background:var(--green);
+    border-radius:999px;
+    transition:transform .38s cubic-bezier(.65,0,.35,1);
+    box-shadow:var(--shadow);
+  }
+  .tabs[data-tab="food"] .pill{ transform:translateX(100%); background:var(--maroon); }
+  .tabs button{
+    position:relative; z-index:1; border:0; background:transparent;
+    padding:10px 6px; font-size:14.5px; font-weight:700; color:var(--ink-soft);
+    border-radius:999px; cursor:pointer; transition:color .3s ease;
+    display:flex; align-items:center; justify-content:center; gap:6px;
+  }
+  .tabs button[aria-selected="true"]{ color:#FBF8EE; }
+  :root[data-theme="dark"] .tabs button[aria-selected="true"]{ color:#101710; }
+  @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .tabs button[aria-selected="true"]{ color:#101710; } }
+
+  .chiprow-wrap{ overflow:hidden; }
+  .chiprow{ display:flex; gap:8px; padding:0 20px 12px; overflow-x:auto; scrollbar-width:none; }
+  .chiprow::-webkit-scrollbar{ display:none; }
+  .chiprow[hidden]{ display:none; }
+  .chip{
+    flex:none; border:1px solid var(--line); background:var(--surface); color:var(--ink-soft);
+    padding:8px 14px; border-radius:999px; font-size:12.5px; font-weight:700; white-space:nowrap;
+    cursor:pointer; transition:background .25s ease, color .25s ease, border-color .25s ease, transform .25s ease;
+  }
+  .chip.active{ color:#FBF8EE; border-color:transparent; transform:translateY(-1px); }
+  .tabs[data-tab="drinks"] ~ .chiprow-wrap .chip.active{ background:var(--green); }
+  .tabs[data-tab="food"] ~ .chiprow-wrap .chip.active{ background:var(--maroon); }
+  :root[data-theme="dark"] .chip.active{ color:#101710; }
+  @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .chip.active{ color:#101710; } }
+
+  /* ---------- Category cover gallery (swipe through, tap to open) ---------- */
+  .gallery{ flex:1; min-height:0; position:relative; overflow:hidden; }
+  .gallery[hidden]{ display:none; }
+  .cover-track{
+    height:100%; display:flex;
+    overflow-x:auto; overflow-y:hidden;
+    scroll-snap-type:x mandatory;
+    scrollbar-width:none;
+    -webkit-overflow-scrolling:touch;
+    overscroll-behavior-x:contain;
+  }
+  .cover-track::-webkit-scrollbar{ display:none; }
+  .cover-card{
+    flex:0 0 86%; width:86%; height:100%;
+    margin-right:14px;
+    scroll-snap-align:center;
+    position:relative;
+    border:0; padding:0; border-radius:26px; overflow:hidden;
+    background:var(--surface-2);
+    cursor:pointer;
+    box-shadow:var(--shadow);
+    display:flex; flex-direction:column;
+    text-align:left;
+  }
+  .cover-card:first-child{ margin-left:20px; }
+  .cover-card:last-child{ margin-right:20px; }
+  .cover-card img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; }
+  .cover-card::after{
+    content:""; position:absolute; inset:0;
+    background:linear-gradient(180deg, rgb(10 20 14 / 0) 40%, rgb(10 20 14 / .72) 100%);
+  }
+  .cover-card.no-photo{ display:flex; align-items:flex-end; }
+  .cover-card.no-photo::after{ display:none; }
+  .kind-coffee.cover-card.no-photo{ background:var(--green-soft); }
+  .kind-sweet.cover-card.no-photo{ background:var(--gold-soft); }
+  .kind-savory.cover-card.no-photo{ background:var(--maroon-soft); }
+  .cover-counter{
+    position:absolute; top:16px; right:16px; z-index:2;
+    background:rgb(10 20 14 / .4); color:#F3ECDA;
+    font-size:11px; font-weight:700; padding:5px 11px; border-radius:999px;
+    backdrop-filter:blur(6px); font-variant-numeric:tabular-nums;
+  }
+  .cover-card.no-photo .cover-counter{ background:rgb(0 0 0 / .12); color:var(--ink-soft); }
+  .cover-tap{
+    position:absolute; top:16px; left:16px; z-index:2;
+    background:rgb(10 20 14 / .4); color:#F3ECDA;
+    font-size:10.5px; font-weight:700; padding:5px 10px; border-radius:999px;
+    backdrop-filter:blur(6px);
+  }
+  .cover-card.no-photo .cover-tap{ background:rgb(0 0 0 / .12); color:var(--ink-soft); }
+  .cover-title{ position:relative; z-index:2; margin-top:auto; padding:22px 22px 26px; width:100%; }
+  .cover-title h2{ margin:0; font-size:28px; font-weight:600; font-style:italic; line-height:1.08; color:#FBF8EE; text-shadow:0 2px 14px rgb(0 0 0 / .35); text-wrap:balance; }
+  .cover-card.no-photo .cover-title h2{ color:var(--ink); text-shadow:none; }
+  .cover-note{ margin:6px 0 0; font-size:12.5px; color:#EDE7D2; font-style:italic; font-family:"Fraunces",serif; }
+  .cover-card.no-photo .cover-note{ color:var(--ink-soft); }
+  .cover-count{ margin:4px 0 0; font-size:11.5px; color:#D9E0D0; }
+  .cover-card.no-photo .cover-count{ color:var(--ink-faint); }
+
+  /* ---------- Detail panel (slides in over the gallery) ---------- */
+  .detail{
+    position:fixed; inset:0; z-index:35;
+    background:var(--bg);
+    display:flex; flex-direction:column;
+    transform:translateX(100%);
+    transition:transform .4s cubic-bezier(.32,.72,.33,1);
+  }
+  .detail.open{ transform:translateX(0); }
+  .detail-photo{
+    position:relative; flex:0 0 auto;
+    height:clamp(190px, 30vh, 260px);
+    overflow:hidden;
+    background:var(--surface-2);
+    padding-top:env(safe-area-inset-top,0px);
+    display:flex; flex-direction:column;
+  }
+  .detail-photo img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; }
+  .detail-photo::after{
+    content:""; position:absolute; inset:0;
+    background:linear-gradient(180deg, rgb(10 20 14 / .18) 0%, rgb(10 20 14 / 0) 30%, rgb(10 20 14 / .62) 100%);
+  }
+  .detail-photo.no-photo::after{ display:none; }
+  .kind-coffee .detail-photo.no-photo{ background:var(--green-soft); }
+  .kind-sweet .detail-photo.no-photo{ background:var(--gold-soft); }
+  .kind-savory .detail-photo.no-photo{ background:var(--maroon-soft); }
+  .detail-nav{
+    position:absolute; left:0; right:0; z-index:2;
+    top:calc(14px + env(safe-area-inset-top,0px));
+    display:flex; align-items:center; justify-content:space-between;
+    padding:0 14px;
+  }
+  .detail-nav button{
+    width:36px; height:36px; border-radius:50%; border:0;
+    background:rgb(10 20 14 / .4); color:#F3ECDA; font-size:16px;
+    backdrop-filter:blur(6px); cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .detail-photo.no-photo .detail-nav button{ background:rgb(0 0 0 / .12); color:var(--ink-soft); }
+  .detail-nav .spacer{ flex:1; }
+  .detail-arrows{ display:flex; gap:8px; }
+  .detail-title{ position:relative; z-index:2; padding:14px 22px 18px; margin-top:auto; }
+  .detail-title h2{ margin:0; font-size:25px; font-weight:600; font-style:italic; line-height:1.1; color:#FBF8EE; text-shadow:0 2px 14px rgb(0 0 0 / .35); text-wrap:balance; }
+  .detail-photo.no-photo .detail-title h2{ color:var(--ink); text-shadow:none; }
+  .detail-note{ margin:5px 0 0; font-size:12px; color:#EDE7D2; font-style:italic; font-family:"Fraunces",serif; }
+  .detail-photo.no-photo .detail-note{ color:var(--ink-soft); }
+
+  .page-items{
+    flex:1; min-height:0; overflow-y:auto;
+    padding:16px 20px calc(28px + env(safe-area-inset-bottom,0px));
+    -webkit-overflow-scrolling:touch;
+    display:flex; flex-direction:column; gap:10px;
+  }
+
+  .card{
+    text-align:left; display:flex; gap:14px; align-items:flex-start; justify-content:space-between;
+    background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:14px 15px;
+    cursor:pointer;
+    opacity:0; transform:translateY(14px);
+    transition:opacity .5s ease, transform .5s ease, border-color .2s ease, box-shadow .2s ease;
+  }
+  .card.in{ opacity:1; transform:translateY(0); }
+  .card:hover{ border-color:var(--ink-faint); box-shadow:var(--shadow); }
+  .card:active{ transform:scale(.985); }
+  .card.featured{ background:var(--gold-block); border-color:transparent; }
+  .card.featured .desc{ color:var(--ink); opacity:.75; }
+  .card.featured .vol{ color:var(--ink); opacity:.6; }
+  .card .name-row{ display:flex; align-items:center; flex-wrap:wrap; gap:6px 8px; }
+  .card .name{ font-weight:700; font-size:15px; line-height:1.3; }
+  .card .desc{ margin:4px 0 0; font-size:12.5px; color:var(--ink-soft); line-height:1.45; max-width:40ch; }
+  .card .vol{ margin-top:5px; font-size:11.5px; color:var(--ink-faint); font-variant-numeric:tabular-nums; }
+  .badge{
+    display:inline-flex; align-items:center; gap:3px; font-size:10px; font-weight:800; letter-spacing:.02em;
+    padding:2px 7px; border-radius:999px; line-height:1.5;
+  }
+  .badge.cold{ background:var(--green-soft); color:var(--green-ink); }
+  .badge.halal{ background:var(--gold-soft); color:var(--gold-ink); }
+  .badge.age{ background:var(--maroon-soft); color:var(--maroon-ink); }
+  .badge.fresh{ background:var(--gold-soft); color:var(--gold-ink); }
+
+  .price-col{ flex:none; text-align:right; }
+  .price{ font-weight:800; font-size:15px; white-space:nowrap; font-variant-numeric:tabular-nums; }
+
+  /* ---------- Bottom sheet ---------- */
+  .backdrop{
+    position:fixed; inset:0; background:rgb(15 20 13 / .5);
+    opacity:0; pointer-events:none; transition:opacity .3s ease; z-index:40;
+  }
+  .backdrop.open{ opacity:1; pointer-events:auto; }
+  .sheet{
+    position:fixed; left:0; right:0; bottom:0; max-width:640px; margin:0 auto;
+    background:var(--surface); border-radius:22px 22px 0 0; box-shadow:var(--sheet-shadow);
+    padding:14px 22px calc(26px + env(safe-area-inset-bottom,0px));
+    transform:translateY(100%); transition:transform .4s cubic-bezier(.32,.72,.33,1);
+    z-index:41; max-height:80vh; overflow-y:auto;
+  }
+  .sheet.open{ transform:translateY(0); }
+  .sheet .grabber{ width:36px; height:4px; border-radius:99px; background:var(--line); margin:0 auto 16px; }
+  .sheet .kicker{ font-size:11px; letter-spacing:.1em; text-transform:uppercase; font-weight:800; color:var(--ink-faint); margin-bottom:6px; }
+  .sheet h3{ margin:0 0 8px; font-size:24px; font-weight:600; line-height:1.2; text-wrap:balance; }
+  .sheet .badges{ display:flex; gap:6px; flex-wrap:wrap; margin-bottom:10px; }
+  .sheet .desc{ font-size:14.5px; line-height:1.6; color:var(--ink-soft); margin:0 0 18px; }
+  .sheet .meta{ display:flex; justify-content:space-between; align-items:center; border-top:1px solid var(--line); padding-top:16px; }
+  .sheet .meta .vol{ font-size:12.5px; color:var(--ink-faint); }
+  .sheet .meta .price{ font-size:22px; }
+  .sheet .soon{ margin-top:14px; font-size:12px; color:var(--ink-faint); background:var(--surface-2); border-radius:10px; padding:9px 12px; text-align:center; }
+  .sheet .close{
+    position:absolute; top:14px; right:16px; width:30px; height:30px; border-radius:50%;
+    border:1px solid var(--line); background:var(--surface); color:var(--ink-soft); font-size:16px; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .card{ transition:none !important; opacity:1 !important; transform:none !important; }
+    .tabs .pill, .sheet, .backdrop, .chip, .carousel{ transition:none !important; scroll-behavior:auto !important; }
+  }
+</style>
+
+<div class="app">
+  <header class="topbar">
+    <div class="brandrow">
+      <span class="bean"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3c4 1 7 4.5 7 8.5A7 7 0 1 1 8.2 4.6" stroke-width="1.6" stroke-linecap="round"/></svg></span>
+      <span class="name">Coffeeshop Company</span>
+      <span class="sub">Меню по QR</span>
+    </div>
+    <div class="tabs" id="tabs" data-tab="drinks">
+      <div class="pill"></div>
+      <button id="tab-drinks" role="tab" aria-selected="true">☕ Напитки</button>
+      <button id="tab-food" role="tab" aria-selected="false">🍽 Еда</button>
+    </div>
+    <div class="chiprow-wrap">
+      <div class="chiprow" id="chips-drinks"></div>
+      <div class="chiprow" id="chips-food" hidden></div>
+    </div>
+  </header>
+
+  <div class="gallery" id="gallery-drinks" data-group="drinks"><div class="cover-track" id="cover-drinks"></div></div>
+  <div class="gallery" id="gallery-food" data-group="food" hidden><div class="cover-track" id="cover-food"></div></div>
+</div>
+
+<div class="detail" id="detail">
+  <div class="detail-photo" id="detailPhoto">
+    <img id="detailImg" src="" alt="">
+    <div class="detail-nav">
+      <button id="detailBack" aria-label="Назад к категориям">←</button>
+      <span class="spacer"></span>
+      <div class="detail-arrows">
+        <button id="detailPrev" aria-label="Предыдущая категория">‹</button>
+        <button id="detailNext" aria-label="Следующая категория">›</button>
+      </div>
+    </div>
+    <div class="detail-title">
+      <h2 id="detailTitle">Название</h2>
+      <p class="detail-note" id="detailNote" hidden></p>
+    </div>
+  </div>
+  <div class="page-items" id="detailItems"></div>
+</div>
+
+<div class="backdrop" id="backdrop"></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true">
+  <button class="close" id="sheetClose" aria-label="Закрыть">✕</button>
+  <div class="grabber"></div>
+  <div class="kicker" id="sheetCat">Категория</div>
+  <h3 id="sheetName">Название</h3>
+  <div class="badges" id="sheetBadges"></div>
+  <p class="desc" id="sheetDesc"></p>
+  <div class="meta">
+    <span class="vol" id="sheetVol"></span>
+    <span class="price" id="sheetPrice"></span>
+  </div>
+  <div class="soon">Онлайн-заказ и оплата подключим на следующем этапе — пока меню можно только листать</div>
+</div>
+
+<script>
+(function(){
+  const BADGE = {
+    cold: '❄ можно холодным',
+    halal: '☾ халяль',
+    age: '18+',
+    fresh: '🍊 на свежевыжатом фреше'
+  };
+
+  // kind: coffee (green) | sweet (gold) | savory (maroon)
+  const CATALOG = {
+    drinks: [
+      { id:'season', title:'Сезон пряных вкусов', kind:'coffee', note:'Сезонное предложение', img:'images/season-hero.jpg', items:[
+        {n:'Капучино «Осенний пирог»', p:'350 ₽', v:'300 мл', d:'Капучино, вдохновлённый классическим пирогом с карамельной патокой и корицей.'},
+        {n:'Копчёный американо', p:'300 ₽', v:'300 мл', d:'Насыщенный американо с выразительными дымными нотами и пряным акцентом копчёной паприки.'},
+        {n:'Смоки-латте', p:'350 ₽', v:'300 мл', d:'Латте с мягкой медовой сладостью, пикантной копчёной паприкой и дымным послевкусием.'},
+        {n:'Хани-латте', p:'350 ₽', v:'300 мл', d:'Согревающий медовый латте с имбирём и тёплыми нотами куркумы.'},
+        {n:'Чай гранатовый', p:'350 ₽', v:'400 мл', d:'Яркий гранатовый чай с освежающей мятой и можжевельником.'},
+        {n:'Чай шотландский', p:'420 ₽', v:'400 мл', d:'Традиционный можжевеловый чай с молоком и мёдом.'},
+      ]},
+      { id:'east', title:'Пряная восточная коллекция', kind:'coffee', img:'images/east-hero.jpg', items:[
+        {n:'Коричный американо', p:'300 ₽', v:'300 мл', d:'Чёрный кофе с глубоким вкусом корицы.'},
+        {n:'Кофе-Ганг', p:'300 ₽', v:'300 мл', d:'Жёлтый — куркума и ваниль, зелёный — матча и эстрагон, красный — малина и чили, синий — анчан и лаванда.', tag:'жёлтый / зелёный / красный / синий'},
+        {n:'Масала-кофе', p:'350 ₽', v:'300 мл', d:'Насыщенный кофе с молоком, чёрным чаем и ароматной смесью восточных специй.'},
+        {n:'Мускатный латте', p:'350 ₽', v:'300 мл', d:'Пряный латте с ванильной сладостью и выразительным ароматом мускатного ореха.'},
+      ]},
+      { id:'cheese', title:'Сырная коллекция', kind:'coffee', img:'images/cheese-hero.jpg', items:[
+        {n:'Кофе по-лапландски', p:'250 / 300 ₽', v:'80 / 250 мл', d:'Крепкий эспрессо с кусочками твёрдого сыра — сочетание кофейной горчинки и сливочно-солоноватого вкуса. Северная традиция в оригинальном прочтении.'},
+        {n:'Раф Кремчиз', p:'350 ₽', v:'300 мл', d:'Нежный сливочный раф с творожным сыром и солёной карамелью, с лёгкой сырной кислинкой и карамельным послевкусием.'},
+        {n:'Сырный латте', p:'420 ₽', v:'400 мл', d:'Насыщенный сливочный латте с чеддером и пармезаном, с лёгкой солоноватостью и кофейной горчинкой.'},
+      ]},
+      { id:'black', title:'Чёрный кофе', kind:'coffee', img:'images/black-hero.jpg', items:[
+        {n:'Эспрессо', p:'190 / 200 ₽', v:'40 / 80 мл'},
+        {n:'Лунго', p:'190 ₽', v:'80 мл'},
+        {n:'Ристретто', p:'200 ₽', v:'40 мл'},
+        {n:'Макиато', p:'190 / 200 ₽', v:'50 / 90 мл'},
+        {n:'Кон Панна', p:'190 / 200 ₽', v:'50 / 90 мл'},
+        {n:'Американо', p:'200 / 220 ₽', v:'200 / 300 мл', badges:['cold']},
+        {n:'Коретто', p:'190 / 200 ₽', v:'50 / 90 мл'},
+      ]},
+      { id:'milk', title:'Кофе с молоком', kind:'coffee', img:'images/milk-hero.jpg', items:[
+        {n:'Капучино', p:'220 / 260 / 290 ₽', v:'250 / 300 / 400 мл', badges:['cold']},
+        {n:'Латте', p:'220 / 260 / 290 ₽', v:'250 / 300 / 400 мл', badges:['cold']},
+        {n:'Флэт Уайт', p:'290 ₽', v:'250 мл'},
+        {n:'Кортадо', p:'270 ₽', v:'250 мл'},
+        {n:'Кофе по-венски', p:'330 ₽', v:'300 мл'},
+        {n:'Раф', p:'300 ₽', v:'300 мл'},
+        {n:'Моккачино', p:'330 ₽', v:'300 мл', tag:'чёрный / белый'},
+        {n:'Глясе', p:'340 ₽', v:'250 мл'},
+      ]},
+      { id:'tea', title:'Чайные напитки и какао', kind:'coffee', img:'images/tea-hero.jpg', items:[
+        {n:'Глогги', p:'310 ₽', v:'400 мл'},
+        {n:'Глинтвейн безалкогольный', p:'310 ₽', v:'400 мл'},
+        {n:'Чай имбирно-облепиховый', p:'310 ₽', v:'400 мл'},
+        {n:'Чай имбирно-цитрусовый', p:'310 ₽', v:'400 мл'},
+        {n:'Чай классический', p:'240 ₽', v:'400 мл', tag:'в ассортименте'},
+        {n:'Матча-латте', p:'310 ₽', v:'400 мл'},
+        {n:'Какао', p:'230 ₽', v:'300 мл', tag:'чёрный / белый'},
+      ]},
+      { id:'cold-coffee', title:'Холодный кофе', kind:'coffee', img:'images/cold-coffee-hero.jpg', items:[
+        {n:'Эспрессо-тоник', p:'320 ₽', v:'400 мл'},
+        {n:'Бамбл кофе', p:'390 ₽', v:'400 мл', badges:['fresh']},
+        {n:'Фраппе', p:'330 ₽', v:'400 мл'},
+      ]},
+      { id:'cold-drinks', title:'Холодные напитки и фреши', kind:'coffee', img:'images/cold-drinks-hero.jpg', items:[
+        {n:'Молочный коктейль', p:'290 ₽', v:'400 мл'},
+        {n:'Лимонад', p:'280 ₽', v:'400 мл'},
+        {n:'Матча-тоник', p:'300 ₽', v:'400 мл'},
+        {n:'Матча-бамбл', p:'320 ₽', v:'400 мл'},
+        {n:'Фреш апельсин', p:'320 / 390 ₽', v:'250 / 400 мл'},
+        {n:'Фреш грейпфрут', p:'320 / 390 ₽', v:'250 / 400 мл'},
+        {n:'Фреш цитрус микс', p:'320 / 390 ₽', v:'250 / 400 мл'},
+      ]},
+      { id:'soft', title:'Безалкогольные напитки', kind:'coffee', img:'images/soft-hero.jpg', items:[
+        {n:'Вода БонАква негазированная', p:'170 ₽', v:'330 мл'},
+        {n:'Вода БонАква газированная', p:'170 ₽', v:'330 мл'},
+        {n:'Сок Rich', p:'190 ₽', v:'200 мл', tag:'апельсин / яблоко / вишня'},
+        {n:'Rich биттер лемон / тоник', p:'220 ₽', v:'330 мл', tag:'индиан тоник / мандарин / грейпфрут'},
+        {n:'Rich кола / кола зеро', p:'200 ₽', v:'330 мл'},
+        {n:'Bёрн оригинальный', p:'250 ₽', v:'330 мл', badges:['age']},
+      ]},
+      { id:'beer', title:'Бутылочное пиво', kind:'coffee', img:'images/beer-hero.jpg', items:[
+        {n:'Лёвенброй светлый лагер 0%', p:'250 ₽', v:'440 мл'},
+        {n:'Бад лёгкое светлое 0%', p:'250 ₽', v:'450 мл'},
+        {n:'Хугарден светлое нефильтрованное', p:'300 ₽', v:'450 мл', badges:['age']},
+        {n:'Крушовице светлое 0,3%', p:'250 ₽', v:'330 мл'},
+      ]},
+      { id:'add-drink', title:'Добавки к напитку', kind:'sweet', img:'images/add-drink-hero.jpg', items:[
+        {n:'Молоко классическое', p:'60 ₽', v:'100 мл'},
+        {n:'Растительное молоко', p:'100 ₽', v:'100 мл', tag:'кокосовое / миндальное / банановое / безлактозное'},
+        {n:'Сливки / взбитые сливки', p:'80 / 90 ₽', v:'50 мл'},
+        {n:'Мороженое', p:'70 ₽', v:'50 г'},
+        {n:'Мёд', p:'60 ₽', v:'50 г'},
+        {n:'Маршмеллоу', p:'40 ₽', v:'10 г'},
+        {n:'Арахис', p:'40 ₽', v:'10 г'},
+        {n:'Мята / розмарин / чабрец', p:'40 ₽', v:'3 г'},
+        {n:'Шот эспрессо', p:'80 ₽', v:'40 мл'},
+        {n:'Матча', p:'50 ₽', v:'40 мл'},
+      ]},
+      { id:'syrup', title:'Сиропы', kind:'sweet', note:'Сезонные вкусы уточняйте у бариста', img:'images/syrup-hero.jpg', items:[
+        {n:'Сироп на выбор', p:'40 ₽', v:'30 мл', d:'Орех, мята, кокос, ваниль, малина, амаретто, солёная карамель, попкорн.'},
+      ]},
+      { id:'sauce-drink', title:'Соусы', kind:'sweet', img:'images/sauce-hero.jpg', items:[
+        {n:'Белый шоколад', p:'40 ₽', v:'30 мл'},
+        {n:'Тёмный шоколад', p:'40 ₽', v:'30 мл'},
+        {n:'Карамель', p:'40 ₽', v:'30 мл'},
+      ]},
+    ],
+    food: [
+      { id:'breakfast', title:'Завтраки до 14:00', kind:'savory', img:'images/breakfast-hero.jpg', items:[
+        {n:'Лепёшка роти с сыром и грибами', p:'290 ₽', v:'200 г', d:'Нежная бездрожжевая лепёшка роти с обжаренными грибами, сыром моцарелла и свежим салатным миксом.', f:true},
+        {n:'Лепёшка роти с сыром и ветчиной', p:'290 ₽', v:'200 г', d:'Нежная бездрожжевая лепёшка роти с ветчиной халяль, сыром моцарелла и свежим салатным миксом.', badges:['halal']},
+        {n:'Сырники с топингом', p:'300 ₽', v:'210 / 50 г', d:'Пышные, творожные, обжаренные до румяности. Сметана, варенье или сгущёнка на выбор.'},
+        {n:'Венский завтрак', p:'450 ₽', v:'395 г', d:'Сытный завтрак со шпинатным омлетом, колбасками и венской вафлей. Соус на выбор.'},
+        {n:'Сырники с заварным кремом и вишнёвым соусом', p:'310 ₽', v:'210 / 50 г', d:'Румяные сырники с нежной текстурой и лёгкой ягодной кислинкой.'},
+        {n:'Омлет с ветчиной и моцареллой', p:'250 ₽', v:'335 г', d:'Пышный омлет с обжаренной ветчиной и расплавленным сыром моцарелла.'},
+        {n:'Омлет со шпинатом и черри', p:'250 ₽', v:'290 г', d:'Нежный омлет со шпинатом и помидорами черри.'},
+      ]},
+      { id:'snacks', title:'Закуски', kind:'savory', img:'images/snacks-hero.jpg', items:[
+        {n:'Кесадилья', p:'290 ₽', v:'190 г', d:'Пшеничная тортилья с начинкой из курицы, кукурузы и сыра под фирменным соусом.', f:true},
+        {n:'Ролл с креветками', p:'380 ₽', v:'250 г', d:'Обжаренные креветки с хрустящим салатом, свежими овощами и нежным соусом в пшеничной лепёшке.'},
+        {n:'Ролл с курицей', p:'310 ₽', v:'250 г', d:'Куриное филе, хрустящая зелень и сливочное послевкусие под авторским соусом в пшеничной лепёшке.'},
+        {n:'Чиабатта с курицей', p:'350 ₽', v:'300 г', d:'Итальянский хлеб с пористым мякишем и золотистой корочкой, внутри — сочное куриное филе и листья салата.'},
+        {n:'Сэндвич с индейкой', p:'310 ₽', v:'270 г', d:'Нежное филе индейки на пшеничном хлебе со свежими овощами.'},
+        {n:'Сэндвич с курицей', p:'310 ₽', v:'300 г', d:'Обжаренное куриное филе, хрустящие листья салата и сочные томаты.'},
+        {n:'Сэндвич с лососем', p:'480 ₽', v:'200 г', d:'Нежный лосось в сочетании с мягким сливочным сыром.'},
+        {n:'Креветки с соусом', p:'550 ₽', v:'5 / 25 г', d:'Золотистые креветки, обжаренные до идеального хруста, с пикантным соусом.'},
+      ]},
+      { id:'soups', title:'Салаты и супы', kind:'savory', img:'images/soups-hero.jpg', items:[
+        {n:'Цезарь с креветками', p:'460 ₽', v:'300 г', d:'Креветки на гриле, салат «айсберг», хрустящие сухари, пармезан, соус с анчоусами, помидоры черри.'},
+        {n:'Цезарь с курицей', p:'420 ₽', v:'320 г', d:'Сочное куриное филе на гриле, салат «айсберг», хрустящие сухари, пармезан, соус с анчоусами, помидоры черри.', f:true},
+        {n:'Суп чечевичный', p:'250 ₽', v:'400 г', d:'Крем-суп из красной чечевицы со специями, куриным филе, овощами, сметаной и зеленью.'},
+        {n:'Суп лапша куриная', p:'210 ₽', v:'400 г', d:'Наваристый бульон с домашней лапшой, зеленью и морковью.'},
+      ]},
+      { id:'pizza', title:'Пицца', kind:'savory', img:'images/pizza-hero.jpg', items:[
+        {n:'Пепперони', p:'470 ₽', v:'250 г', d:'Классические колбаски пепперони, много моцареллы и соус из спелых томатов.', f:true},
+        {n:'Маргарита', p:'370 ₽', v:'220 г', d:'Фирменный томатный соус, моцарелла, свежий базилик и капля оливкового масла.'},
+        {n:'Ассорти', p:'470 ₽', v:'250 г', d:'Ветчина, пепперони, куриное филе, шампиньоны, болгарский перец, моцарелла, томатный соус.'},
+        {n:'Цезарь', p:'520 ₽', v:'250 г', d:'Запечённое куриное филе и сыр, хрустящий салат, пармезан и фирменная заправка.'},
+        {n:'Жульен', p:'500 ₽', v:'280 г', d:'Обжаренные шампиньоны и нежное куриное филе в густом сливочном соусе.'},
+      ]},
+      { id:'hot', title:'Горячие блюда', kind:'savory', img:'images/hot-hero.jpg', items:[
+        {n:'Стейк сёмги с печёным картофелем и соусом', p:'950 ₽', v:'300 / 10 г', d:'Сочный стейк из лосося с ароматным картофелем и сливочно-укропным соусом.'},
+        {n:'Венские колбаски с печёным картофелем', p:'350 ₽', v:'300 г', d:'Классика австрийской кухни: сочные поджаристые колбаски с золотистым картофелем.'},
+        {n:'Биф-бургер с картошкой фри', p:'550 ₽', v:'200 / 100 г', d:'Свежая булочка, говяжья котлета, плавленый сыр, помидор, айсберг, лук, огурцы, соус «Бургер».', badges:['halal'], f:true},
+        {n:'Цезарь-бургер с картошкой фри', p:'400 ₽', v:'250 / 100 г', d:'Два соуса, листья салата, помидор, куриное филе на гриле в фирменной булочке.', badges:['halal']},
+      ]},
+      { id:'waffles', title:'Венские вафли', kind:'sweet', img:'images/waffles-hero.jpg', items:[
+        {n:'Вафля со взбитыми сливками, печеньем Орео и шоколадом', p:'300 ₽', v:'210 г', d:'Тёплая вафля под куполом из взбитых сливок, хрустящее печенье и тонкие нити шоколада.', f:true},
+        {n:'Вафля с мороженым и ягодным соусом', p:'290 ₽', v:'170 г', d:'Тёплая хрустящая вафля с шариком прохладного пломбира.'},
+        {n:'Вафля с корицей', p:'250 ₽', v:'200 г', d:'Золотистая вафля с глубоким ароматом корицы — к чашке горячего кофе.'},
+        {n:'Банана сплит с клубничным мороженым', p:'320 ₽', v:'290 г', d:'Шарики бананового и клубничного мороженого со взбитыми сливками.', f:true},
+      ]},
+      { id:'pastry', title:'Выпечка и десерты', kind:'sweet', img:'images/pastry-hero.jpg', items:[
+        {n:'Чизкейк Классик', p:'250 ₽', v:'180 / 50 г', d:'Классический нежный чизкейк на песочной основе с бархатистой творожной текстурой.', f:true},
+        {n:'Ассорти корпусных десертов', p:'320 ₽', v:'90 г', d:'Десерты в шоколадном корпусе: хрустящий шоколад, внутри тает муссовая начинка.'},
+        {n:'Круассан с шоколадом', p:'190 ₽', v:'130 г', d:'Хрустящий снаружи и мягкий внутри круассан с насыщенным шоколадным кремом.'},
+        {n:'Венский торт Захер', p:'370 ₽', v:'210 / 20 г', d:'Классический шоколадный торт в венском стиле с тонкой абрикосовой кислинкой.', f:true},
+        {n:'Штрудель с яблоком и мороженым', p:'270 ₽', v:'280 / 50 г', d:'Классический венский штрудель с яблоком и корицей, с шариком мороженого.'},
+        {n:'Штрудель с вишней и мороженым', p:'270 ₽', v:'280 / 50 г', d:'Классический венский штрудель с вишней и шариком мороженого.'},
+        {n:'Донаты в ассортименте', p:'190 ₽', v:'100 г', d:'От насыщенного шоколада и нежного маршмеллоу до освежающей малины.'},
+      ]},
+      { id:'desserts', title:'Десерты', kind:'sweet', img:'images/desserts-hero.jpg', items:[
+        {n:'Наполеон', p:'240 ₽', v:'200 г', d:'Многослойный «Наполеон» из тончайшего домашнего теста с нежным заварным кремом.', f:true},
+        {n:'Чиа манго', p:'220 ₽', v:'150 г', d:'Пудинг из семян чиа на кокосовом молоке, манговое пюре и акцент маракуйи. Без муки, масла и выпечки.'},
+        {n:'Чиа малина', p:'240 ₽', v:'150 г', d:'Пудинг из семян чиа на кокосовом молоке со свежими ягодами малины, без сахара и муки.'},
+        {n:'Торт «Фисташковое облако» с малиной', p:'350 ₽', v:'150 / 20 г', d:'Влажный фисташковый бисквит с лёгким сливочным сыром и домашним малиновым джемом.'},
+        {n:'Тирамису', p:'270 ₽', v:'200 г', d:'Пропитка из эспрессо, нежный маскарпоне и тонкий слой какао.', f:true},
+        {n:'Эклер кокос', p:'210 ₽', v:'90 г', d:'Заварное тесто, крем кокос на белом шоколаде, посыпка из кокосовой стружки.'},
+        {n:'Эклер сникерс', p:'210 ₽', v:'90 г', d:'Солёная карамель, арахис, шоколад и тягучий пралине, хрустящая посыпка.'},
+        {n:'Эклер «Дубайский шоколад»', p:'210 ₽', v:'90 г', d:'Начинка с фисташковой пастой и карамелью — как в знаменитом дубайском шоколаде.'},
+        {n:'Эклер шоколад', p:'210 ₽', v:'90 г', d:'Тёмный шоколад и лёгкий заварной крем внутри.'},
+        {n:'Фондан шоколадный', p:'370 ₽', v:'110 / 50 г', d:'Горячий кекс с жидкой шоколадной сердцевиной и шариком холодного пломбира.', f:true},
+        {n:'Лаванда черника', p:'320 ₽', v:'200 г', d:'Воздушный десерт с цветочными нотами: лавандовый мусс, черничный конфитюр и бисквит.'},
+        {n:'Мороженое', p:'70 ₽', v:'50 г', d:'На выбор: пломбир, шоколад, клубника, фисташка, банан.'},
+      ]},
+      { id:'add-food', title:'Добавьте в блюдо', kind:'savory', img:'images/add-food-hero.jpg', items:[
+        {n:'Лосось слабой соли', p:'250 ₽', v:'40 г'},
+        {n:'Куриное филе', p:'100 ₽', v:'80 г'},
+        {n:'Ветчина', p:'80 ₽', v:'50 г'},
+        {n:'Сыр моцарелла / чеддер', p:'80 ₽', v:'30 г'},
+        {n:'Соус на выбор', p:'50 ₽', v:'50 г', tag:'кетчуп / сметана / ягодный соус / мёд / сгущёнка'},
+        {n:'Венская колбаска', p:'80 ₽', v:'50 г', badges:['halal']},
+        {n:'Топпинг на выбор', p:'50 ₽', v:'40 г', tag:'арахис дроблёный / ягоды / банан'},
+      ]},
+    ]
+  };
+
+  const chipsHost = { drinks: document.getElementById('chips-drinks'), food: document.getElementById('chips-food') };
+  const galleryEl = { drinks: document.getElementById('gallery-drinks'), food: document.getElementById('gallery-food') };
+  const trackEl = { drinks: document.getElementById('cover-drinks'), food: document.getElementById('cover-food') };
+  const tabsEl = document.getElementById('tabs');
+
+  function badgeHTML(list){
+    let out = '';
+    (list||[]).forEach(b=>{ out += `<span class="badge ${b}">${BADGE[b]}</span>`; });
+    return out;
+  }
+
+  function cardHTML(cat, it){
+    return `<button class="card${it.f?' featured':''}" type="button" data-cat="${cat.title}" data-name="${it.n}" data-price="${it.p}" data-vol="${it.v||''}" data-desc="${(it.d||'').replace(/"/g,'&quot;')}" data-badges="${(it.badges||[]).join(',')}">
+      <div>
+        <div class="name-row"><span class="name">${it.n}</span>${badgeHTML(it.badges)}</div>
+        ${it.tag ? `<p class="desc">${it.tag}</p>` : (it.d ? `<p class="desc">${it.d}</p>` : '')}
+        ${it.v ? `<div class="vol">${it.v}</div>` : ''}
+      </div>
+      <div class="price-col"><div class="price">${it.p}</div></div>
+    </button>`;
+  }
+
+  function render(){
+    ['drinks','food'].forEach(group=>{
+      const cats = CATALOG[group];
+      const html = cats.map((cat,i)=>{
+        const photoInner = cat.img
+          ? `<img src="${cat.img}" alt="${cat.title}" loading="${i===0?'eager':'lazy'}">`
+          : '';
+        return `<button class="cover-card kind-${cat.kind}${cat.img?'':' no-photo'}" type="button" data-index="${i}">
+          ${photoInner}
+          <span class="cover-counter">${i+1} / ${cats.length}</span>
+          <span class="cover-tap">Открыть меню →</span>
+          <div class="cover-title">
+            <h2>${cat.title}</h2>
+            ${cat.note ? `<p class="cover-note">${cat.note}</p>` : ''}
+            <p class="cover-count">${cat.items.length} ${itemsWord(cat.items.length)}</p>
+          </div>
+        </button>`;
+      }).join('');
+      trackEl[group].innerHTML = html;
+      chipsHost[group].innerHTML = cats.map((c,i)=>`<button class="chip${i===0?' active':''}" data-index="${i}">${c.title}</button>`).join('');
+    });
+  }
+  function itemsWord(n){
+    const mod10 = n%10, mod100 = n%100;
+    if(mod10===1 && mod100!==11) return 'позиция';
+    if([2,3,4].includes(mod10) && ![12,13,14].includes(mod100)) return 'позиции';
+    return 'позиций';
+  }
+  render();
+
+  // ---- tab switching ----
+  const tabDrinks = document.getElementById('tab-drinks');
+  const tabFood = document.getElementById('tab-food');
+  function setTab(tab){
+    tabsEl.dataset.tab = tab;
+    tabDrinks.setAttribute('aria-selected', tab==='drinks');
+    tabFood.setAttribute('aria-selected', tab==='food');
+    chipsHost.drinks.hidden = tab!=='drinks';
+    chipsHost.food.hidden = tab!=='food';
+    galleryEl.drinks.hidden = tab!=='drinks';
+    galleryEl.food.hidden = tab!=='food';
+    closeDetail();
+  }
+  tabDrinks.addEventListener('click', ()=>setTab('drinks'));
+  tabFood.addEventListener('click', ()=>setTab('food'));
+
+  // ---- chip click -> swipe gallery to cover ----
+  function goToIndex(group, index){
+    const track = trackEl[group];
+    const card = track.children[index];
+    if(card){ track.scrollTo({ left: card.offsetLeft - 20, behavior:'smooth' }); }
+  }
+  ['drinks','food'].forEach(group=>{
+    chipsHost[group].querySelectorAll('.chip').forEach(chip=>{
+      chip.addEventListener('click', ()=> goToIndex(group, +chip.dataset.index));
+    });
+  });
+
+  // ---- gallery scroll -> active chip ----
+  ['drinks','food'].forEach(group=>{
+    const track = trackEl[group];
+    let ticking = false;
+    track.addEventListener('scroll', ()=>{
+      if(ticking) return;
+      ticking = true;
+      requestAnimationFrame(()=>{
+        ticking = false;
+        const cards = [...track.children];
+        const center = track.scrollLeft + track.clientWidth/2;
+        let idx = 0, best = Infinity;
+        cards.forEach((c,i)=>{
+          const mid = c.offsetLeft + c.offsetWidth/2;
+          const d = Math.abs(mid - center);
+          if(d < best){ best = d; idx = i; }
+        });
+        const chips = chipsHost[group].querySelectorAll('.chip');
+        chips.forEach((c,i)=>{
+          const isActive = i===idx;
+          c.classList.toggle('active', isActive);
+          if(isActive){ c.scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'}); }
+        });
+      });
+    }, { passive:true });
+  });
+
+  // ---- detail panel ----
+  const detail = document.getElementById('detail');
+  const detailPhoto = document.getElementById('detailPhoto');
+  const detailImg = document.getElementById('detailImg');
+  const detailTitle = document.getElementById('detailTitle');
+  const detailNote = document.getElementById('detailNote');
+  const detailItems = document.getElementById('detailItems');
+  const detailBack = document.getElementById('detailBack');
+  const detailPrev = document.getElementById('detailPrev');
+  const detailNext = document.getElementById('detailNext');
+  let currentGroup = null, currentIndex = 0;
+
+  function openDetail(group, index){
+    const cats = CATALOG[group];
+    const cat = cats[index];
+    currentGroup = group; currentIndex = index;
+    detailPhoto.className = 'detail-photo kind-' + cat.kind + (cat.img ? '' : ' no-photo');
+    if(cat.img){ detailImg.src = cat.img; detailImg.alt = cat.title; detailImg.hidden = false; }
+    else { detailImg.hidden = true; detailImg.removeAttribute('src'); }
+    detailTitle.textContent = cat.title;
+    if(cat.note){ detailNote.textContent = cat.note; detailNote.hidden = false; } else { detailNote.hidden = true; }
+    detailItems.innerHTML = cat.items.map(it=>cardHTML(cat,it)).join('');
+    detailItems.scrollTop = 0;
+    detailPrev.disabled = index<=0;
+    detailNext.disabled = index>=cats.length-1;
+    detail.classList.add('open');
+    revealCards(detailItems);
+  }
+  function closeDetail(){ detail.classList.remove('open'); }
+  function stepDetail(delta){
+    if(currentGroup===null) return;
+    const next = currentIndex + delta;
+    if(next<0 || next>=CATALOG[currentGroup].length) return;
+    openDetail(currentGroup, next);
+  }
+  detailBack.addEventListener('click', closeDetail);
+  detailPrev.addEventListener('click', ()=>stepDetail(-1));
+  detailNext.addEventListener('click', ()=>stepDetail(1));
+
+  setTab('drinks');
+
+  ['drinks','food'].forEach(group=>{
+    trackEl[group].addEventListener('click', (e)=>{
+      const card = e.target.closest('.cover-card');
+      if(card){ openDetail(group, +card.dataset.index); }
+    });
+  });
+
+  // ---- card reveal on scroll ----
+  function revealCards(container){
+    const reveal = new IntersectionObserver((entries)=>{
+      entries.forEach((entry,i)=>{
+        if(entry.isIntersecting){
+          entry.target.style.transitionDelay = (i%4 * 45) + 'ms';
+          entry.target.classList.add('in');
+          reveal.unobserve(entry.target);
+        }
+      });
+    }, { root:container, threshold:0.15 });
+    container.querySelectorAll('.card').forEach(c=>reveal.observe(c));
+  }
+
+  // ---- bottom sheet ----
+  const backdrop = document.getElementById('backdrop');
+  const sheet = document.getElementById('sheet');
+  const sheetCat = document.getElementById('sheetCat');
+  const sheetName = document.getElementById('sheetName');
+  const sheetDesc = document.getElementById('sheetDesc');
+  const sheetVol = document.getElementById('sheetVol');
+  const sheetPrice = document.getElementById('sheetPrice');
+  const sheetBadges = document.getElementById('sheetBadges');
+
+  function openSheet(card){
+    sheetCat.textContent = card.dataset.cat;
+    sheetName.textContent = card.dataset.name;
+    sheetDesc.textContent = card.dataset.desc || '';
+    sheetDesc.hidden = !card.dataset.desc;
+    sheetVol.textContent = card.dataset.vol;
+    sheetPrice.textContent = card.dataset.price;
+    const badges = (card.dataset.badges||'').split(',').filter(Boolean);
+    sheetBadges.innerHTML = badgeHTML(badges);
+    backdrop.classList.add('open');
+    sheet.classList.add('open');
+  }
+  function closeSheet(){
+    backdrop.classList.remove('open');
+    sheet.classList.remove('open');
+  }
+  document.addEventListener('click', (e)=>{
+    const card = e.target.closest('.card');
+    if(card) openSheet(card);
+  });
+  backdrop.addEventListener('click', closeSheet);
+  document.getElementById('sheetClose').addEventListener('click', closeSheet);
+  document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeSheet(); });
+})();
+</script>
