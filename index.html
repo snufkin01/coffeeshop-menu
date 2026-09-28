@@ -145,12 +145,12 @@
   @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .tabs button[aria-selected="true"]{ color:#101710; } }
 
   .chiprow-wrap{ overflow:hidden; }
-  .chiprow{ display:flex; gap:8px; padding:0 20px 12px; overflow-x:auto; scrollbar-width:none; }
+  .chiprow{ display:flex; gap:10px; padding:6px 20px 22px; overflow-x:auto; scrollbar-width:none; }
   .chiprow::-webkit-scrollbar{ display:none; }
   .chiprow[hidden]{ display:none; }
   .chip{
-    flex:none; border:1px solid var(--line); background:var(--surface); color:var(--ink-soft);
-    padding:8px 14px; border-radius:999px; font-size:12.5px; font-weight:700; white-space:nowrap;
+    flex:none; border:1.5px solid var(--line); background:var(--surface); color:var(--ink-soft);
+    padding:16px 24px; border-radius:999px; font-size:17px; font-weight:700; white-space:nowrap;
     cursor:pointer; transition:background .25s ease, color .25s ease, border-color .25s ease, transform .25s ease;
   }
   .chip.active{ color:#FBF8EE; border-color:transparent; transform:translateY(-1px); }
