@@ -84,11 +84,42 @@
   .app{ display:flex; flex-direction:column; height:100%; min-height:0; }
 
   /* Fold/square-screen mode: this layout is fixed-px, tuned to look right at
-     an ordinary phone width. Rather than stretching it across the extra
-     width (which makes the fixed sizes look oversized), keep it at a normal
-     phone width and center it, so it looks exactly like the phone version. */
-  html.fold-mode body{ display:flex; justify-content:center; background:var(--ink); }
-  html.fold-mode .app{ max-width:430px; width:100%; box-shadow:0 0 60px -18px rgb(0 0 0 / .5); }
+     an ordinary phone width, so it uses the extra width of an unfolded/square
+     screen badly if left alone. Instead of centering it in a narrow column
+     (empty, "cropped-looking" sides), switch the two scrolling single-card
+     views to a two-column grid, so cards land at roughly phone-card width
+     and the whole screen is actually used. */
+  html.fold-mode .cover-track{
+    display:grid; grid-template-columns:1fr 1fr; gap:18px;
+    height:100%; padding:20px 20px calc(20px + env(safe-area-inset-bottom,0px));
+    overflow-y:auto; overflow-x:hidden;
+    scroll-snap-type:none; align-content:start;
+  }
+  html.fold-mode .cover-card{
+    flex:unset; width:auto; height:440px; margin:0;
+    scroll-snap-align:none;
+  }
+  html.fold-mode .cover-card:first-child, html.fold-mode .cover-card:last-child{ margin:0; }
+  html.fold-mode .cover-counter, html.fold-mode .cover-tap{
+    font-size:15px; padding:7px 13px; top:12px;
+  }
+  html.fold-mode .cover-counter{ right:12px; }
+  html.fold-mode .cover-tap{ left:12px; }
+  html.fold-mode .cover-title{ padding:16px 18px 20px; }
+  html.fold-mode .cover-title h2{ font-size:32px; }
+  html.fold-mode .cover-note{ font-size:16px; margin-top:8px; }
+  html.fold-mode .cover-count{ font-size:14px; margin-top:6px; }
+
+  html.fold-mode .page-items{
+    display:grid; grid-template-columns:1fr 1fr; gap:16px;
+    align-content:start;
+  }
+  html.fold-mode .card{ flex-direction:column; align-items:flex-start; padding:18px 16px; }
+  html.fold-mode .card .name{ font-size:22px; }
+  html.fold-mode .card .desc{ font-size:15px; max-width:none; }
+  html.fold-mode .card .vol{ font-size:13px; }
+  html.fold-mode .price-col{ text-align:left; margin-top:8px; }
+  html.fold-mode .price{ font-size:22px; }
 
   /* ---------- Top bar ---------- */
   .topbar{
