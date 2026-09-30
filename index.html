@@ -1,3 +1,21 @@
+<script>
+// Only unfolded foldables and other near-square, wide phone screens (Galaxy Fold
+// unfolded, square-screen iPhones, etc.) render this phone-tuned layout at an
+// oversized scale without a viewport meta tag. Ordinary phones look right with
+// no meta tag at all, so we only add one when we detect that squarish/wide shape.
+(function(){
+  var w = window.innerWidth, h = window.innerHeight;
+  var long = Math.max(w,h), short = Math.min(w,h);
+  var ratio = long / short;
+  var isSquareishAndWide = short >= 550 && ratio < 1.45;
+  if(isSquareishAndWide){
+    var m = document.createElement('meta');
+    m.name = 'viewport';
+    m.content = 'width=device-width, initial-scale=1, viewport-fit=cover';
+    document.head.appendChild(m);
+  }
+})();
+</script>
 <title>Coffeeshop Company</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
