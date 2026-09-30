@@ -110,6 +110,18 @@
   html.fold-mode .cover-note{ font-size:16px; margin-top:8px; }
   html.fold-mode .cover-count{ font-size:14px; margin-top:6px; }
 
+  /* Top bar was left at full phone size, so it dominated the screen out of
+     proportion to the now-compact grid below — shrink it to match. */
+  html.fold-mode .brandrow{ padding:14px 20px 10px; gap:10px; }
+  html.fold-mode .brandrow .bean{ width:32px; height:32px; }
+  html.fold-mode .brandrow .bean svg{ width:18px; height:18px; }
+  html.fold-mode .brandrow .name{ font-size:15px; }
+  html.fold-mode .brandrow .sub{ font-size:14px; }
+  html.fold-mode .tabs{ margin:0 20px 10px; }
+  html.fold-mode .tabs button{ padding:14px 6px; font-size:17px; gap:6px; }
+  html.fold-mode .chiprow{ gap:10px; padding:6px 20px 16px; }
+  html.fold-mode .chip{ padding:13px 20px; font-size:16px; border-width:2px; }
+
   html.fold-mode .page-items{
     display:grid; grid-template-columns:1fr 1fr; gap:16px;
     align-content:start;
