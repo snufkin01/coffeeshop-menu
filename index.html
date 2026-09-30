@@ -1,18 +1,16 @@
 <script>
-// Only unfolded foldables and other near-square, wide phone screens (Galaxy Fold
-// unfolded, square-screen iPhones, etc.) render this phone-tuned layout at an
-// oversized scale without a viewport meta tag. Ordinary phones look right with
-// no meta tag at all, so we only add one when we detect that squarish/wide shape.
+// This layout is fixed-px, tuned to look right at an ordinary phone width.
+// On an unfolded foldable (Galaxy Fold, etc.) or another near-square, wide
+// phone screen, that same layout renders far too large because there's much
+// more physical width to fill. Ordinary phones are completely untouched by
+// this: we only detect and rescale on that specific squarish/wide shape.
 (function(){
   var w = window.innerWidth, h = window.innerHeight;
   var long = Math.max(w,h), short = Math.min(w,h);
   var ratio = long / short;
   var isSquareishAndWide = short >= 550 && ratio < 1.45;
   if(isSquareishAndWide){
-    var m = document.createElement('meta');
-    m.name = 'viewport';
-    m.content = 'width=device-width, initial-scale=1, viewport-fit=cover';
-    document.head.appendChild(m);
+    document.documentElement.classList.add('fold-mode');
   }
 })();
 </script>
@@ -84,6 +82,13 @@
   a{ color:inherit; }
 
   .app{ display:flex; flex-direction:column; height:100%; min-height:0; }
+
+  /* Fold/square-screen mode: this layout is fixed-px, tuned to look right at
+     an ordinary phone width. Rather than stretching it across the extra
+     width (which makes the fixed sizes look oversized), keep it at a normal
+     phone width and center it, so it looks exactly like the phone version. */
+  html.fold-mode body{ display:flex; justify-content:center; background:var(--ink); }
+  html.fold-mode .app{ max-width:430px; width:100%; box-shadow:0 0 60px -18px rgb(0 0 0 / .5); }
 
   /* ---------- Top bar ---------- */
   .topbar{
