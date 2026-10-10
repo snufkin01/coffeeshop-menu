@@ -12,6 +12,22 @@
   if(isSquareishAndWide){
     document.documentElement.classList.add('fold-mode');
   }
+
+  // iPhone/iPad Safari only: size the app to the *visible* height (the browser's
+  // bottom toolbar otherwise covers the bottom of the layout, where the cover
+  // captions sit). Every other device skips this branch entirely.
+  var ua = navigator.userAgent;
+  var isIOS = /iPad|iPhone|iPod/.test(ua) ||
+              (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  if(isIOS){
+    var root = document.documentElement;
+    root.classList.add('ios');
+    var setH = function(){ root.style.setProperty('--app-h', window.innerHeight + 'px'); };
+    setH();
+    window.addEventListener('resize', setH);
+    window.addEventListener('orientationchange', setH);
+    if(window.visualViewport){ window.visualViewport.addEventListener('resize', setH); }
+  }
 })();
 </script>
 <title>Coffeeshop Company</title>
@@ -82,6 +98,16 @@
   a{ color:inherit; }
 
   .app{ display:flex; flex-direction:column; height:100%; min-height:0; }
+
+  /* iPhone/iPad Safari only (html.ios is set by the head script). Safari's
+     toolbar and flex percent-height quirks can push the cover captions out of
+     view, so: use the real visible height, don't rely on percent heights for
+     the swipe track, and give the captions their own dark backing. */
+  html.ios .app{ height:var(--app-h, 100%); }
+  html.ios .detail{ height:var(--app-h, auto); bottom:auto; }
+  html.ios:not(.fold-mode) .cover-track{ position:absolute; top:0; right:0; bottom:0; left:0; height:auto; }
+  html.ios .cover-title{ background:linear-gradient(180deg, rgb(10 20 14 / 0) 0%, rgb(10 20 14 / .55) 45%); }
+  html.ios .cover-title h2, html.ios .detail-title h2{ text-shadow:0 2px 10px rgb(0 0 0 / .65); }
 
   /* Fold/square-screen mode: this layout is fixed-px, tuned to look right at
      an ordinary phone width, so it uses the extra width of an unfolded/square
@@ -239,14 +265,14 @@
     position:absolute; top:20px; right:20px; z-index:2;
     background:rgb(10 20 14 / .4); color:#F3ECDA;
     font-size:24px; font-weight:700; padding:11px 22px; border-radius:999px;
-    backdrop-filter:blur(6px); font-variant-numeric:tabular-nums;
+    -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px); font-variant-numeric:tabular-nums;
   }
   .cover-card.no-photo .cover-counter{ background:rgb(0 0 0 / .12); color:var(--ink-soft); }
   .cover-tap{
     position:absolute; top:20px; left:20px; z-index:2;
     background:rgb(10 20 14 / .4); color:#F3ECDA;
     font-size:22px; font-weight:700; padding:11px 20px; border-radius:999px;
-    backdrop-filter:blur(6px);
+    -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);
   }
   .cover-card.no-photo .cover-tap{ background:rgb(0 0 0 / .12); color:var(--ink-soft); }
   .cover-title{ position:relative; z-index:2; margin-top:auto; padding:26px 24px 30px; width:100%; }
@@ -292,7 +318,7 @@
   .detail-nav button{
     width:92px; height:92px; border-radius:50%; border:0;
     background:rgb(10 20 14 / .45); color:#F3ECDA; font-size:42px;
-    backdrop-filter:blur(6px); cursor:pointer;
+    -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px); cursor:pointer;
     display:flex; align-items:center; justify-content:center;
   }
   .detail-photo.no-photo .detail-nav button{ background:rgb(0 0 0 / .12); color:var(--ink-soft); }
@@ -620,6 +646,9 @@
     return 'позиций';
   }
   render();
+  if(document.documentElement.classList.contains('ios')){
+    document.querySelectorAll('img[loading="lazy"]').forEach(function(i){ i.loading='eager'; });
+  }
 
   // ---- tab switching ----
   const tabDrinks = document.getElementById('tab-drinks');
